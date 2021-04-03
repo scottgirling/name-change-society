@@ -1,0 +1,31 @@
+version: '3'
+services:
+    web:
+        image: nginx:latest
+        ports:
+            - "8080:80"
+        volumes:
+            - ./nginx.conf:/etc/nginx/conf.d/nginx.conf
+            - ./app:/app
+    php:
+        depends_on:
+            - web
+            - mysql
+        build:
+            context: .
+            dockerfile: PHP.Dockerfile
+        volumes:
+            - ./app:/app
+    mysql:
+        image: mariadb:latest
+        command: --init-file /app/init.sql
+        volumes:
+            - mysqldata:/var/lib/mysql
+            - ./init.sql:/app/init.sql
+        environment:
+            MYSQL_ROOT_USER: root
+            MYSQL_ROOT_PASSWORD: secret
+        ports:
+            - 3306:3306
+volumes:
+    mysqldata: {}
