@@ -19,4 +19,3 @@ login_button.addEventListener('click', () => {
         document.querySelector('#message_field').innerHTML = data.data.client_message;
     });
 }, false);
-// Testing
